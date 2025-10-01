@@ -1,28 +1,55 @@
 package com.yourapp.entity;
+
 import jakarta.persistence.*;
-import lombok.*;
-import java.math.BigDecimal;
-import java.util.List;
+import com.fasterxml.jackson.annotation.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name="orders")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "orders")
 public class Order {
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private BigDecimal totalAmount;
-  private String status; // PENDING, CONFIRMED, SHIPPED, CANCELLED
 
-  @ManyToOne
-  @JoinColumn(name="user_id")
-  private User user;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @OneToMany(mappedBy="order", cascade=CascadeType.ALL, orphanRemoval=true)
-  private List<OrderItem> items;
+    private LocalDateTime orderDate = LocalDateTime.now();
+    private double totalAmount;
 
-  @ManyToOne
-  @JoinColumn(name="address_id")
-  private Address shippingAddress;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(LocalDateTime orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+    
 }

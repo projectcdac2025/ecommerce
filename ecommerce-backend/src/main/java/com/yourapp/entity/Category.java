@@ -1,17 +1,21 @@
 package com.yourapp.entity;
+
 import jakarta.persistence.*;
-import lombok.*;
-import java.util.List;
+import com.fasterxml.jackson.annotation.*;
+import java.util.*;
 
 @Entity
-@Table(name="categories")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "categories")
 public class Category {
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private String name;
-  @OneToMany(mappedBy = "category")
-  private List<Product> products;
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @OneToMany(mappedBy = "category")
+    @JsonManagedReference
+    private List<Product> products = new ArrayList<>();
+
+    // getters and setters
 }

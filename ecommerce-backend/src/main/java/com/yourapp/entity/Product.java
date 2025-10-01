@@ -1,28 +1,63 @@
 package com.yourapp.entity;
+
 import jakarta.persistence.*;
-import lombok.*;
-import java.math.BigDecimal;
-import java.util.List;
+import com.fasterxml.jackson.annotation.*;
 
 @Entity
-@Table(name="products")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "products")
 public class Product {
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private String name;
-  @Column(length = 4000)
-  private String description;
-  private BigDecimal price;
-  private Integer stock;
-  private String sku;
 
-  @ManyToOne
-  @JoinColumn(name="category_id")
-  private Category category;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @OneToMany(mappedBy="product", cascade=CascadeType.ALL)
-  private List<ProductImage> images;
+    private String name;
+    private String description;
+    private double price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonBackReference
+    private Category category;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+    // getters and setters
 }
