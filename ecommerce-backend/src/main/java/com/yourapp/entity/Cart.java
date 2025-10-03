@@ -43,6 +43,10 @@ public class Cart {
 	public void setItems(List<CartItem> items) {
 		this.items = items;
 	}
+	 public Cart() {}
 
-    // getters and setters
+	    // --- constructor we need
+	    public Cart(User user) {
+	        this.user = user;
+	    }
 }

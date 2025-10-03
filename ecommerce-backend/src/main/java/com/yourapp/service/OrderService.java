@@ -10,6 +10,7 @@ import com.yourapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -45,5 +46,13 @@ public class OrderService {
         cartRepository.save(cart);
 
         return orderRepository.save(order);
+    }
+
+    // 🔥 New method: get all orders for a user
+    public List<Order> getOrdersByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return orderRepository.findByUser(user);
     }
 }

@@ -52,6 +52,13 @@ public class CartItem {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	 public CartItem() {}
 
+	    // --- constructor we need
+	    public CartItem(Cart cart, Product product, int quantity) {
+	        this.cart = cart;
+	        this.product = product;
+	        this.quantity = quantity;
+	    }
  
 }
