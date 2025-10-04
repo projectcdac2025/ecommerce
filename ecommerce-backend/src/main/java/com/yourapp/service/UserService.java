@@ -23,6 +23,7 @@ public class UserService {
         Role role = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         user.getRoles().add(role);
+      
         return userRepository.save(user);
     }
 
@@ -41,4 +42,16 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+	public User updateUser(Long id, User updatedUser) {
+		// TODO Auto-generated method stub
+		User existingUser=userRepository.findById(id).orElseThrow(()->new RuntimeException("user not found"+id));
+		
+		existingUser.setName(updatedUser.getName());
+		existingUser.setEmail(updatedUser.getEmail());
+		existingUser.setPassword(updatedUser.getPassword());
+		return userRepository.save(existingUser);
+	}
+
+	
 }

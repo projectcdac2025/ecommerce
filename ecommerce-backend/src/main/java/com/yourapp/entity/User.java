@@ -16,7 +16,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -29,10 +29,12 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonIgnore
     private Cart cart;
 
 	public Long getId() {
@@ -89,6 +91,10 @@ public class User {
 
 	public void setCart(Cart cart) {
 		this.cart = cart;
+	}
+
+	public User() {
+	
 	}
 
   

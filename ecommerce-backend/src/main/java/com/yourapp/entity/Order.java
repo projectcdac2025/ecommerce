@@ -17,6 +17,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
+    @JsonIgnore
     private User user;
 
 	public Long getId() {
