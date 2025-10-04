@@ -39,7 +39,29 @@ public class ProductService {
         return productRepository.findByCategory(category);
     }
 
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public Product updateProduct(Long productId, Product updatedProduct, Long categoryId) {
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Update basic details
+        existingProduct.setName(updatedProduct.getName());
+        existingProduct.setDescription(updatedProduct.getDescription());
+        existingProduct.setPrice(updatedProduct.getPrice());
+        
+
+        // If categoryId is provided, update it
+        if (categoryId != null) {
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            existingProduct.setCategory(category);
+        }
+
+        return productRepository.save(existingProduct);
     }
-}
+    
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        productRepository.delete(product);
+    }
+  }
