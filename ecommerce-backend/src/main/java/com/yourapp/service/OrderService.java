@@ -55,4 +55,8 @@ public class OrderService {
 
         return orderRepository.findByUser(user);
     }
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
+    }
 }
