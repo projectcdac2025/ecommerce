@@ -1,34 +1,57 @@
-import React, { createContext, useEffect, useState} from 'react';
-import api from '../services/api';
- export const AuthContext = createContext();
- export const AuthProvider = ({ children }) => {
-     const [user, setUser] = useState(null);
-     useEffect(() => {
-         const storedUser = localStorage.getItem('user');
-            if (storedUser) {   
-                setUser(JSON.parse(storedUser));
-            }
-        }, []);
-        const login = async (credentials) => {
-            const response = await api.post('/auth/login', credentials);
-            const {token,user} = response.data;
-            
-            localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('token', token);
-            setUser(user);
-        };
-        const logout = () => {
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            setUser(null);
-        };
-const signup = async (payload) => {
-    return  await api.post('/auth/signup', payload);
-    
+import React, { createContext, useState, useEffect } from "react";
+import api from "../services/api";
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  // Initialize user from localStorage so login persists across refresh
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Keep localStorage and state in sync after login/logout
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    }
+  }, [user]);
+
+  // Login: calls backend, saves token+user
+  const login = async ({ email, password }) => {
+    const res = await api.post("/auth/login", { email, password });
+    const { token, user: u } = res.data;
+    if (token) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(u));
+      setUser(u);
+    } else {
+      throw new Error("Login response missing token");
+    }
+  };
+
+  // Signup: create user (does not auto-login)
+  const signup = async ({ username, email, password }) => {
+    return api.post("/auth/signup", { username, email, password });
+  };
+
+  // Logout: clear storage and state
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, signup }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
-     return (
-         <AuthContext.Provider value={{ user, login, logout, signup }}>
-             {children}
-         </AuthContext.Provider>
-     );
- }  ;
