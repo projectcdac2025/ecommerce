@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -22,6 +23,9 @@ export default function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          
+
+
         </Routes>
       </div>
     </>
