@@ -46,14 +46,16 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+        	.cors().and()
+        	.csrf().disable()
             .authorizeHttpRequests()
             .requestMatchers("/api/users/register", "/api/users/login","/api/auth/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // register our auth provider
+        // register our authentication provider
         http.authenticationProvider(authenticationProvider(myUserDetailsService));
 
         // add JWT filter
